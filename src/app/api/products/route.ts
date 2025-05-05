@@ -16,6 +16,7 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
     const updatedProduct = await request.json();
+    const products = await prisma.product.findMany();
     const index = products.findIndex((p) => p.id === updatedProduct.id);
     if (index === -1) {
         return NextResponse.json({ error: "Product not found" }, { status: 404 });
@@ -25,6 +26,7 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+    const products = await prisma.product.findMany();
     const { id } = await request.json();
     const index = products.findIndex((p) => p.id === id);
     if (index === -1) {
