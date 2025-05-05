@@ -1,4 +1,3 @@
-
 services:
   # app:
   #   build: .
@@ -10,16 +9,19 @@ services:
   #   environment:
   #     - DATABASE_URL=postgresql://postgres:password@db:5432/fuellife
   #   depends_on:
-  #     - db
+  #     - postgresql
   #   command: sh -c "npm run build && npm run start"
 
-  db:
+  postgresql:
+    container_name: postgresql
     image: postgres:15
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: fuellife
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

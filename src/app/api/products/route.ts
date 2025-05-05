@@ -1,19 +1,17 @@
 import { NextResponse } from "next/server";
+import { PrismaClient } from '@prisma/client';
 
-let products = [
-    { id: 1, name: "Product 1", price: 100 },
-    { id: 2, name: "Product 2", price: 200 },
-];
+const prisma = new PrismaClient();
 
 export async function GET() {
+    const products = await prisma.product.findMany();
     return NextResponse.json(products);
 }
 
 export async function POST(request: Request) {
     const newProduct = await request.json();
-    newProduct.id = Date.now();
-    products.push(newProduct);
-    return NextResponse.json(newProduct, { status: 201 });
+    const createdProduct = await prisma.product.create({ data: newProduct });
+    return NextResponse.json(createdProduct, { status: 201 });
 }
 
 export async function PUT(request: Request) {
