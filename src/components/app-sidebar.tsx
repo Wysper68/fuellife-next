@@ -15,15 +15,20 @@ import {
 const items = [
     {
         title: "Home",
-        url: "#",
+        url: "/",
         icon: Home,
+    },
+    {
+        title: "Products",
+        url: "/products",
+        icon: Inbox,
     },
     {
         title: "Settings",
         url: "#",
         icon: Settings,
     },
-]
+];
 
 export function AppSidebar() {
     return (

@@ -1,14 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-
 export default function HomePage() {
-    const router = useRouter();
-
-    useEffect(() => {
-        router.push('/dashboard');
-    }, [router]);
-
-    return <div>Redirecting to Dashboard…</div>;
+    return (
+        <div style={{ padding: 20 }}>
+            <h1 className="text-3xl font-bold">Bienvenue sur la page d'accueil</h1>
+            <p>Explorez notre site pour en savoir plus !</p>
+        </div>
+    );
 }
