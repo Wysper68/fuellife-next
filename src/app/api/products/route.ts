@@ -24,14 +24,3 @@ export async function PUT(request: Request) {
     products[index] = updatedProduct;
     return NextResponse.json(updatedProduct);
 }
-
-export async function DELETE(request: Request) {
-    const products = await prisma.product.findMany();
-    const { id } = await request.json();
-    const index = products.findIndex((p) => p.id === id);
-    if (index === -1) {
-        return NextResponse.json({ error: "Product not found" }, { status: 404 });
-    }
-    products.splice(index, 1);
-    return NextResponse.json({ message: "Product deleted successfully" });
-}
