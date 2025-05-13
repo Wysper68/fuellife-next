@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -13,7 +14,7 @@ import {
     FormControl,
     FormMessage,
 } from "@/components/ui/form"
-import { fetchProducts, createProduct } from '@/services/productService.service';
+import { fetchProducts, createProduct, deleteProduct } from '@/services/productService.service';
 
 interface Product {
     id: number;
@@ -23,6 +24,7 @@ interface Product {
 export default function ProductsPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [newProduct, setNewProduct] = useState<{ name: string; }>({ name: '' });
+    const router = useRouter();
 
     useEffect(() => {
         fetchProducts()
@@ -36,6 +38,15 @@ export default function ProductsPage() {
             const createdProduct: Product = await createProduct(newProduct);
             setProducts((prev) => [...prev, createdProduct]);
             setNewProduct({ name: '' });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteProduct(id);
+            setProducts((prev) => prev.filter((p) => p.id !== id));
         } catch (err) {
             console.error(err);
         }
@@ -62,6 +73,7 @@ export default function ProductsPage() {
                     <TableRow>
                         <TableHead>ID</TableHead>
                         <TableHead>Nom</TableHead>
+                        <TableHead>Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -69,6 +81,20 @@ export default function ProductsPage() {
                         <TableRow key={product.id}>
                             <TableCell>{product.id}</TableCell>
                             <TableCell>{product.name}</TableCell>
+                            <TableCell>
+                                <div className="flex gap-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => router.push(`/products/${product.id}`)}
+                                    >
+                                        Voir les détails
+                                    </Button>
+                                    <Button variant="destructive" size="sm" onClick={() => handleDelete(product.id)}>
+                                        Supprimer
+                                    </Button>
+                                </div>
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

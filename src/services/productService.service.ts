@@ -23,3 +23,17 @@ export async function updateProduct(product: any) {
     if (!res.ok) throw new Error("Erreur lors de la mise à jour du produit");
     return res.json();
 }
+
+export async function deleteProduct(id: number) {
+    const res = await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+    });
+    if (!res.ok) throw new Error("Erreur lors de la suppression du produit");
+    return res.json();
+}
+
+export async function getProduct(id: number) {
+    const res = await fetch(`/api/products/${id}`);
+    if (!res.ok) throw new Error("Erreur lors de la récupération du produit");
+    return res.json();
+}
