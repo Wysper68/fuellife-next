@@ -13,6 +13,7 @@ import {
     FormControl,
     FormMessage,
 } from "@/components/ui/form"
+import { fetchProducts, createProduct } from '@/services/productService.service';
 
 interface Product {
     id: number;
@@ -24,22 +25,19 @@ export default function ProductsPage() {
     const [newProduct, setNewProduct] = useState<{ name: string; }>({ name: '' });
 
     useEffect(() => {
-        fetch('/api/products')
-            .then((res) => res.json())
-            .then((data: Product[]) => setProducts(data));
+        fetchProducts()
+            .then((data: Product[]) => setProducts(data))
+            .catch((err) => console.error(err));
     }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const response = await fetch('/api/products', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newProduct),
-        });
-        if (response.ok) {
-            const createdProduct: Product = await response.json();
+        try {
+            const createdProduct: Product = await createProduct(newProduct);
             setProducts((prev) => [...prev, createdProduct]);
             setNewProduct({ name: '' });
+        } catch (err) {
+            console.error(err);
         }
     };
 
