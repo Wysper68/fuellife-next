@@ -47,3 +47,20 @@ export async function POST(request: Request) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    const users = await prisma.user.findMany({
+      select: { id: true, email: true, name: true, createdAt: true },
+    });
+    return NextResponse.json(users);
+  } catch (error) {
+    return NextResponse.json(
+      {
+        error: "Erreur lors de la récupération des utilisateurs",
+        details: (error as Error).message,
+      },
+      { status: 500 }
+    );
+  }
+}
